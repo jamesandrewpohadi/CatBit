@@ -19,7 +19,7 @@ A | B | C | Co | S
 
 ![image of diagram]()
 
-![image of Schematics Diagram]("images/Schematic Diagram.png")
+![image of Schematics Diagram](images/Schematic Diagram.png)
 
 ![image of Full Bit Adder]()
 
