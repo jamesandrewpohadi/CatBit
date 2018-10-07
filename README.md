@@ -25,7 +25,7 @@ A | B | C | Co | S
 
 > If you notice carefully, the Full Bit Adder above resembles a cat!
 
-![image of cat](images/Cat.png)
+![image of cat](images/Cat.jpeg)
 
 ## Full Bit Adder + Mojo
 
