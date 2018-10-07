@@ -1,0 +1,107 @@
+module mojo_top (
+    input clk,              // 50MHz clock
+    input rst_n,            // reset button (active low)
+    output led [8],         // 8 user controllable LEDs
+    output spi_miso,        // AVR SPI MISO
+    output spi_channel [4], // AVR general purpose pins (used by default to select ADC channel)
+    output avr_rx,          // AVR RX (FPGA TX)
+    output io_led [3][8],   // LEDs on IO Shield
+    output io_seg [8],      // 7-segment LEDs on IO Shield
+    output io_sel [4],      // Digit select on IO Shield
+    input io_dip [3][8],     // DIP switches on IO Shield
+    output a,
+    output b,
+    output c,
+    input sum,
+    input carry
+  ) {
+  var exp;
+  sig rst;                  // reset signal
+  checker myChecker;
+  
+  .clk(clk) {
+    // The reset conditioner is used to synchronize the reset signal to the FPGA
+    // clock. This ensures the entire FPGA comes out of reset at the same time.
+    reset_conditioner reset_cond;
+
+    .rst(rst) {
+      blinker myBlinker;
+      fsm state(#INIT(AUTO)) = {AUTO, MANUAL};
+    }
+  }
+  
+  always {
+    reset_cond.in = ~rst_n;    // input raw inverted reset signal
+    rst = reset_cond.out;      // conditioned reset
+    
+    led = 8h00;             // turn LEDs off
+    spi_miso = bz;          // not using SPI
+    spi_channel = bzzzz;    // not using flags
+    avr_rx = bz;            // not using serial port
+    
+    io_led = 3x{{8b00}};    // turn LEDs off
+    io_seg = 8hff;          // turn segments off
+    io_sel = 4hf;     
+    a = 0;
+    b = 0;
+    c = 0;
+    exp = 2b00;
+    myChecker.sum = sum;
+    myChecker.carry = carry;
+    case (state.q) {
+      state.AUTO:
+        io_led[2][0] = 0;
+        io_led[2][1] = 0;
+        io_led[2][7] = myBlinker.blinkA;
+        io_led[2][6] = myBlinker.blinkB;
+        io_led[2][5] = myBlinker.blinkC;
+        a = myBlinker.blinkA;
+        b = myBlinker.blinkB;
+        c = myBlinker.blinkC;
+        io_led[0][7] = myChecker.value[1];
+        io_led[0][6] = myChecker.value[0];
+        exp = myBlinker.blinkA+myBlinker.blinkB+myBlinker.blinkC;
+        io_led[1] = c{exp,6b000000};      
+        if (myChecker.value == exp) {
+          io_led[0][0] = 0;
+          io_led[0][1] = 0;
+        } else {
+          io_led[0][0] = 1;
+          io_led[0][1] = 1;
+        }
+        if (io_dip[2][0]) {
+          state.d = state.MANUAL;
+        }
+      state.MANUAL:
+        io_led[2][0] = 1;
+        io_led[2][1] = 1;
+        io_led[2][7] = io_dip[2][7];
+        io_led[2][6] = io_dip[2][6];
+        io_led[2][5] = io_dip[2][5];
+        a = io_dip[2][7];
+        b = io_dip[2][6];
+        c = io_dip[2][5];
+        io_led[0][7] = myChecker.value[1];
+        io_led[0][6] = myChecker.value[0];
+        exp = io_dip[2][7]+ io_dip[2][6]+ io_dip[2][5];
+        io_led[1] = c{exp,6b000000};
+        if (myChecker.value == exp) {
+          io_led[0][0] = 0;
+          io_led[0][1] = 0;
+        } else {
+          io_led[0][0] = 1;
+          io_led[0][1] = 1;
+        }
+          
+        if (!io_dip[2][0]) {
+          state.d = state.AUTO;
+        }
+        
+    }
+    //led = 8x{0};
+    //led[0] = io_dip[0][0];
+    spi_miso = bz;             // not using SPI
+    spi_channel = bzzzz;       // not using flags
+    avr_rx = bz;               // not using serial port
+  }
+}
