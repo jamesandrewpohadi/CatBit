@@ -19,17 +19,17 @@ A | B | C | Co | S
 
 ![image of diagram]()
 
-![image of Schematics Diagram]()
+![image of Schematics Diagram]("images/Schematic Diagram.png")
 
 ![image of Full Bit Adder]()
 
 > If you notice carefully, the Full Bit Adder above resembles a cat!
 
-![image of cat]()
+![image of cat](images/Cat.png)
 
 ## Full Bit Adder + Mojo
 
-![image of MOJO](MOJO.jpeg)
+![image of MOJO](images/MOJO.jpeg)
 
 Our Mojo have 3 different sections:
 * First section, the first 3 leds represent A, B, C values and the button below as its inputs. The last 2 leds represent Auto or Manual state and the button below is the input.
