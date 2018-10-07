@@ -52,3 +52,21 @@ To switch to manual mode, toggle the button to on. We can see that 2 leds above 
 
 As you see, if the expected output is not equal to the expected output, the 2 led represents error will light up, which can be easily noticed.
 
+## Components
+* Strip Boards
+* Wires
+* MOJO V3
+* IO-Shield
+* SN74HC08N/AND gate
+* CD74HC86E/XOR gate
+* Led x2
+* Switchs
+* Battery 1.5V x4
+* 12k Ohm resistor x3
+* 470k Ohm resistor x2
+
+
+## Software
+* [MOJO IDE](https://alchitry.com/pages/mojo-ide)
+* [ISE](https://alchitry.com/pages/installing-ise)
+
