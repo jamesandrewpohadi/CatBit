@@ -28,9 +28,7 @@ A | B | C | Co | S
 
 ## Full Bit Adder + Mojo
 
-<p align='center'>  
-  <img src='images/MOJO.jpeg' width='440'/>
-</p>
+![MOJO](images/MOJO.jpeg)
 
 Our Mojo have 3 different sections:
 * First section, the first 3 leds represent A, B, C values and the button below as its inputs. The last 2 leds represent Auto or Manual state and the button below is the input.
@@ -41,7 +39,7 @@ Our Mojo have 3 different sections:
 
 **Auto**
 
-In Auto mode, our FPGA will go through all 8 possible case of A,B,C inputs to check our Full Adder
+In Auto mode, our FPGA will go through all 8 possible cases of A,B,C inputs to check our Full Adder
 
 
 **Manual**
