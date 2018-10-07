@@ -17,9 +17,9 @@ A | B | C | Co | S
 
 ## Full Bit Adder using 2 ANDs and 3 XORs
 
-![image of diagram]()
+![image of diagram](images/gates.png)
 
-![image of Schematics Diagram](images/'Schematic Diagram'.png)
+![image of Schematics Diagram](images/SchematicDiagram.png)
 
 ![image of Full Bit Adder]()
 
