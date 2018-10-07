@@ -72,3 +72,10 @@ As you see, if the expected output is not equal to the expected output, the 2 le
 * [MOJO IDE](https://alchitry.com/pages/mojo-ide)
 * [ISE](https://alchitry.com/pages/installing-ise)
 
+## Team
+* Ivan Christian - 1003056
+* James A. Pohadi - 1002899
+* Rachel Chua - 1003129
+* Gou Yuanyuan - 1002972
+* Wang Zijia - 1002885
+
