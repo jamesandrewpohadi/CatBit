@@ -16,12 +16,11 @@ A | B | C | Co | S
 1 | 1 | 1 | 1 | 1
 
 ## Full Bit Adder using 2 ANDs and 3 XORs
-
-![image of diagram](images/gates.png)
-
-![image of Schematics Diagram](images/SchematicDiagram.png)
-
-![image of Full Bit Adder]()
+<p align='center'>  
+  <img src='images/gates.png' width='440'/>
+  <img src='images/SchematicDiagram.jpg' width='440'/>
+  <img src='images/fullbitadder.jpg' width='440'/>
+</p>
 
 > If you notice carefully, the Full Bit Adder above resembles a cat!
 
@@ -29,7 +28,9 @@ A | B | C | Co | S
 
 ## Full Bit Adder + Mojo
 
-![image of MOJO](images/MOJO.jpeg)
+<p align='center'>  
+  <img src='images/MOJO.jpeg' width='440'/>
+</p>
 
 Our Mojo have 3 different sections:
 * First section, the first 3 leds represent A, B, C values and the button below as its inputs. The last 2 leds represent Auto or Manual state and the button below is the input.
