@@ -8,40 +8,41 @@ module mojo_top (
     output io_led [3][8],   // LEDs on IO Shield
     output io_seg [8],      // 7-segment LEDs on IO Shield
     output io_sel [4],      // Digit select on IO Shield
-    input io_dip [3][8],     // DIP switches on IO Shield
+    input io_dip [3][8],    // DIP switches on IO Shield
     output a,
     output b,
     output c,
     input sum,
     input carry
   ) {
+  
   var exp;
   sig rst;                  // reset signal
   checker myChecker;
-  
+  dff counter[28](.clk(clk), .rst(rst)); // Define the counter
   .clk(clk) {
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
-
     .rst(rst) {
-      blinker myBlinker;
-      fsm state(#INIT(AUTO)) = {AUTO, MANUAL};
+      //blinker myBlinker;
+      fsm state(#INIT(OOO)) = {OOO, OOC, OBO, OBC, AOO, AOC, ABO, ABC, MANUAL};
     }
   }
   
   always {
-    reset_cond.in = ~rst_n;    // input raw inverted reset signal
-    rst = reset_cond.out;      // conditioned reset
+    reset_cond.in = ~rst_n; // input raw inverted reset signal
+    rst = reset_cond.out;   // conditioned reset
     
     led = 8h00;             // turn LEDs off
     spi_miso = bz;          // not using SPI
     spi_channel = bzzzz;    // not using flags
     avr_rx = bz;            // not using serial port
     
-    io_led = 3x{{8b00}};    // turn LEDs off
+    io_led = 3x{{8h00}};    // turn LEDs off
     io_seg = 8hff;          // turn segments off
-    io_sel = 4hf;     
+    io_sel = 4hf;           // select no digits
+    counter.d = counter.q + 1;
     a = 0;
     b = 0;
     c = 0;
@@ -49,18 +50,18 @@ module mojo_top (
     myChecker.sum = sum;
     myChecker.carry = carry;
     case (state.q) {
-      state.AUTO:
+      state.OOO:
         io_led[2][0] = 0;
         io_led[2][1] = 0;
-        io_led[2][7] = myBlinker.blinkA;
-        io_led[2][6] = myBlinker.blinkB;
-        io_led[2][5] = myBlinker.blinkC;
-        a = myBlinker.blinkA;
-        b = myBlinker.blinkB;
-        c = myBlinker.blinkC;
+        io_led[2][7] = 0;
+        io_led[2][6] = 0;
+        io_led[2][5] = 0;
+        a = 0;
+        b = 0;
+        c = 0;
         io_led[0][7] = myChecker.value[1];
         io_led[0][6] = myChecker.value[0];
-        exp = myBlinker.blinkA+myBlinker.blinkB+myBlinker.blinkC;
+        exp = 2b00;
         io_led[1] = c{exp,6b000000};      
         if (myChecker.value == exp) {
           io_led[0][0] = 0;
@@ -68,6 +69,199 @@ module mojo_top (
         } else {
           io_led[0][0] = 1;
           io_led[0][1] = 1;
+        }
+        if (counter.q[27]==1) {
+          state.d = state.OOC;
+          counter.d = 0;
+        }
+        if (io_dip[2][0]) {
+          state.d = state.MANUAL;
+        }
+      state.OOC:
+        io_led[2][0] = 0;
+        io_led[2][1] = 0;
+        io_led[2][7] = 0;
+        io_led[2][6] = 0;
+        io_led[2][5] = 1;
+        a = 0;
+        b = 0;
+        c = 1;
+        io_led[0][7] = myChecker.value[1];
+        io_led[0][6] = myChecker.value[0];
+        exp = 2b01;
+        io_led[1] = c{exp,6b000000};      
+        if (myChecker.value == exp) {
+          io_led[0][0] = 0;
+          io_led[0][1] = 0;
+        } else {
+          io_led[0][0] = 1;
+          io_led[0][1] = 1;
+        }
+        if (counter.q[27]==1) {
+          state.d = state.OBO;
+          counter.d = 0;
+        }
+        if (io_dip[2][0]) {
+          state.d = state.MANUAL;
+        }
+      state.OBO:
+        io_led[2][0] = 0;
+        io_led[2][1] = 0;
+        io_led[2][7] = 0;
+        io_led[2][6] = 1;
+        io_led[2][5] = 0;
+        a = 0;
+        b = 1;
+        c = 0;
+        io_led[0][7] = myChecker.value[1];
+        io_led[0][6] = myChecker.value[0];
+        exp = 2b01;
+        io_led[1] = c{exp,6b000000};      
+        if (myChecker.value == exp) {
+          io_led[0][0] = 0;
+          io_led[0][1] = 0;
+        } else {
+          io_led[0][0] = 1;
+          io_led[0][1] = 1;
+        }
+        if (counter.q[27]==1) {
+          state.d = state.OBC;
+          counter.d = 0;
+        }
+        if (io_dip[2][0]) {
+          state.d = state.MANUAL;
+        }
+      state.OBC:
+        io_led[2][0] = 0;
+        io_led[2][1] = 0;
+        io_led[2][7] = 0;
+        io_led[2][6] = 1;
+        io_led[2][5] = 1;
+        a = 0;
+        b = 1;
+        c = 1;
+        io_led[0][7] = myChecker.value[1];
+        io_led[0][6] = myChecker.value[0];
+        exp = 2b10;
+        io_led[1] = c{exp,6b000000};      
+        if (myChecker.value == exp) {
+          io_led[0][0] = 0;
+          io_led[0][1] = 0;
+        } else {
+          io_led[0][0] = 1;
+          io_led[0][1] = 1;
+        }
+        if (counter.q[27]==1) {
+          state.d = state.AOO;
+          counter.d = 0;
+        }
+        if (io_dip[2][0]) {
+          state.d = state.MANUAL;
+        }
+      state.AOO:
+        io_led[2][0] = 0;
+        io_led[2][1] = 0;
+        io_led[2][7] = 1;
+        io_led[2][6] = 0;
+        io_led[2][5] = 0;
+        a = 1;
+        b = 0;
+        c = 0;
+        io_led[0][7] = myChecker.value[1];
+        io_led[0][6] = myChecker.value[0];
+        exp = 2b01;
+        io_led[1] = c{exp,6b000000};      
+        if (myChecker.value == exp) {
+          io_led[0][0] = 0;
+          io_led[0][1] = 0;
+        } else {
+          io_led[0][0] = 1;
+          io_led[0][1] = 1;
+        }
+        if (counter.q[27]==1) {
+          state.d = state.AOC;
+          counter.d = 0;
+        }
+        if (io_dip[2][0]) {
+          state.d = state.MANUAL;
+        }
+      state.AOC:
+        io_led[2][0] = 0;
+        io_led[2][1] = 0;
+        io_led[2][7] = 1;
+        io_led[2][6] = 0;
+        io_led[2][5] = 1;
+        a = 1;
+        b = 0;
+        c = 1;
+        io_led[0][7] = myChecker.value[1];
+        io_led[0][6] = myChecker.value[0];
+        exp = 2b10;
+        io_led[1] = c{exp,6b000000};      
+        if (myChecker.value == exp) {
+          io_led[0][0] = 0;
+          io_led[0][1] = 0;
+        } else {
+          io_led[0][0] = 1;
+          io_led[0][1] = 1;
+        }
+        if (counter.q[27]==1) {
+          state.d = state.ABO;
+          counter.d = 0;
+        }
+        if (io_dip[2][0]) {
+          state.d = state.MANUAL;
+        }
+      state.ABO:
+        io_led[2][0] = 0;
+        io_led[2][1] = 0;
+        io_led[2][7] = 1;
+        io_led[2][6] = 1;
+        io_led[2][5] = 0;
+        a = 1;
+        b = 1;
+        c = 0;
+        io_led[0][7] = myChecker.value[1];
+        io_led[0][6] = myChecker.value[0];
+        exp = 2b10;
+        io_led[1] = c{exp,6b000000};      
+        if (myChecker.value == exp) {
+          io_led[0][0] = 0;
+          io_led[0][1] = 0;
+        } else {
+          io_led[0][0] = 1;
+          io_led[0][1] = 1;
+        }
+        if (counter.q[27]==1) {
+          state.d = state.ABC;
+          counter.d = 0;
+        }
+        if (io_dip[2][0]) {
+          state.d = state.MANUAL;
+        }
+      state.ABC:
+        io_led[2][0] = 0;
+        io_led[2][1] = 0;
+        io_led[2][7] = 1;
+        io_led[2][6] = 1;
+        io_led[2][5] = 1;
+        a = 1;
+        b = 1;
+        c = 1;
+        io_led[0][7] = myChecker.value[1];
+        io_led[0][6] = myChecker.value[0];
+        exp = 2b11;
+        io_led[1] = c{exp,6b000000};      
+        if (myChecker.value == exp) {
+          io_led[0][0] = 0;
+          io_led[0][1] = 0;
+        } else {
+          io_led[0][0] = 1;
+          io_led[0][1] = 1;
+        }
+        if (counter.q[27]==1) {
+          state.d = state.OOO;
+          counter.d = 0;
         }
         if (io_dip[2][0]) {
           state.d = state.MANUAL;
@@ -94,14 +288,9 @@ module mojo_top (
         }
           
         if (!io_dip[2][0]) {
-          state.d = state.AUTO;
+          state.d = state.OOO;
         }
         
     }
-    //led = 8x{0};
-    //led[0] = io_dip[0][0];
-    spi_miso = bz;             // not using SPI
-    spi_channel = bzzzz;       // not using flags
-    avr_rx = bz;               // not using serial port
   }
 }
