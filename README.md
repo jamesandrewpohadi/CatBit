@@ -18,7 +18,7 @@ A | B | C | Co | S
 ## Full Bit Adder using 2 ANDs and 3 XORs
 <p align='center'>  
   <img src='images/gates.png' width='440'/>
-  <img src='images/SchematicDiagram.jpg' width='440'/>
+  <img src='images/SchematicDiagram.png' width='440'/>
   <img src='images/fullbitadder.jpg' width='440'/>
 </p>
 
