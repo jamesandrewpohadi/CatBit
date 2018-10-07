@@ -19,7 +19,7 @@ A | B | C | Co | S
 <p align='center'>  
   <img src='images/gates.png' width='440'/>
   <img src='images/SchematicDiagram.png' width='440'/>
-  <img src='images/fullbitadder.jpg' width='440'/>
+  <img src='images/fullbitadder.jpeg' width='440'/>
 </p>
 
 > If you notice carefully, the Full Bit Adder above resembles a cat!
