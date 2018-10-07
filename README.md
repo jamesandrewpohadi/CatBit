@@ -29,7 +29,7 @@ A | B | C | Co | S
 
 ## Full Bit Adder + Mojo
 
-![image of MOJO]()
+![image of MOJO](MOJO.jpeg)
 
 Our Mojo have 3 different sections:
 * First section, the first 3 leds represent A, B, C values and the button below as its inputs. The last 2 leds represent Auto or Manual state and the button below is the input.
