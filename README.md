@@ -1,4 +1,4 @@
-# FullBitAdder
+# CatBit (FullBitAdder)
 
 A full adder is a digital circuit that performs addition. Full adders are implemented with logic gates in hardware. A full adder adds three one-bit binary numbers, two operands and a carry bit. The adder outputs two numbers, a sum and a carry. The term is contrasted with a half adder, which adds two binary digits.
 
